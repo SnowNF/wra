@@ -59,7 +59,7 @@ check_env_var "LABWC_SH_PATH_IN_CHROOT" "$CHROOT_DIR_IN_CHROOT/labwc.vk.sh"
 check_env_var "REFRESH_INPUTS_SH_PATH_IN_CHROOT" "$CHROOT_DIR_IN_CHROOT/refresh_inputs.sh"
 check_env_var "ADB_PORT" "5555"
 
-set_adbd "$ADB_PORT"
+#set_adbd "$ADB_PORT"
 
 set_comp_pid
 
