@@ -1,0 +1,134 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>MainWindow</class>
+ <widget class="QMainWindow" name="MainWindow">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>640</width>
+    <height>480</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>Wra Control Panel</string>
+  </property>
+  <widget class="QWidget" name="centralwidget">
+   <layout class="QHBoxLayout" name="horizontalLayout_2">
+    <item>
+     <widget class="QListWidget" name="list">
+      <property name="sizePolicy">
+       <sizepolicy hsizetype="Fixed" vsizetype="Expanding">
+        <horstretch>0</horstretch>
+        <verstretch>0</verstretch>
+       </sizepolicy>
+      </property>
+      <property name="sizeAdjustPolicy">
+       <enum>QAbstractScrollArea::AdjustToContents</enum>
+      </property>
+      <property name="viewMode">
+       <enum>QListView::ListMode</enum>
+      </property>
+      <property name="currentRow">
+       <number>-1</number>
+      </property>
+      <item>
+       <property name="text">
+        <string>Home</string>
+       </property>
+       <property name="font">
+        <font>
+         <pointsize>12</pointsize>
+        </font>
+       </property>
+      </item>
+      <item>
+       <property name="text">
+        <string>Labwc</string>
+       </property>
+       <property name="font">
+        <font>
+         <pointsize>12</pointsize>
+        </font>
+       </property>
+      </item>
+      <item>
+       <property name="text">
+        <string>Network</string>
+       </property>
+       <property name="font">
+        <font>
+         <pointsize>12</pointsize>
+        </font>
+       </property>
+      </item>
+      <item>
+       <property name="text">
+        <string>Screen</string>
+       </property>
+       <property name="font">
+        <font>
+         <pointsize>12</pointsize>
+        </font>
+       </property>
+      </item>
+      <item>
+       <property name="text">
+        <string>Misc</string>
+       </property>
+       <property name="font">
+        <font>
+         <pointsize>12</pointsize>
+        </font>
+       </property>
+      </item>
+     </widget>
+    </item>
+    <item>
+     <widget class="QStackedWidget" name="stackedWidget">
+      <widget class="HomeWidget" name="Home"/>
+      <widget class="LabwcWidget" name="Labwc"/>
+      <widget class="NetworkWidget" name="Network"/>
+      <widget class="ScreenWidget" name="Screen"/>
+      <widget class="MiscWidget" name="Misc"/>
+     </widget>
+    </item>
+   </layout>
+  </widget>
+  <widget class="QStatusBar" name="statusbar"/>
+ </widget>
+ <customwidgets>
+  <customwidget>
+   <class>HomeWidget</class>
+   <extends>QWidget</extends>
+   <header location="global">widgets/HomeWidget.h</header>
+   <container>1</container>
+  </customwidget>
+  <customwidget>
+   <class>NetworkWidget</class>
+   <extends>QWidget</extends>
+   <header location="global">widgets/NetworkWidget.h</header>
+   <container>1</container>
+  </customwidget>
+  <customwidget>
+   <class>LabwcWidget</class>
+   <extends>QWidget</extends>
+   <header location="global">widgets/LabwcWidget.h</header>
+   <container>1</container>
+  </customwidget>
+  <customwidget>
+   <class>ScreenWidget</class>
+   <extends>QWidget</extends>
+   <header location="global">widgets/ScreenWidget.h</header>
+   <container>1</container>
+  </customwidget>
+  <customwidget>
+   <class>MiscWidget</class>
+   <extends>QWidget</extends>
+   <header location="global">widgets/MiscWidget.h</header>
+   <container>1</container>
+  </customwidget>
+ </customwidgets>
+ <resources/>
+ <connections/>
+</ui>
