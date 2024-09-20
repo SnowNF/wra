@@ -38,6 +38,6 @@ fi
 _notice_ "Building android-tools"
 mkdir -p android-tools/build
 cd android-tools/build || exit 1
-apt install golang-go liblz4-dev libusb-1.0-0-dev libprotobuf-dev libunwind-dev
+apt install golang-go liblz4-dev libusb-1.0-0-dev libprotobuf-dev libunwind-dev protobuf-compiler
 cmake ..
 cmake --build . -j
