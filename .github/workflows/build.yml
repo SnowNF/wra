@@ -10,8 +10,8 @@ jobs:
 
       - name: Install debootstrap 
         run:  |
-              wget https://salsa.debian.org/installer-team/debootstrap/-/raw/master/debootstrap
-              sudo mv debootstrap /usr/local/bin
+              git clone --depth=1 https://salsa.debian.org/installer-team/debootstrap/
+              sudo ln -s debootstrap/debootstrap /usr/local/bin
               sudo chmod 0755 /usr/local/bin/debootstrap
 
       - name: exec scripts/build_all.sh
