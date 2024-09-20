@@ -14,8 +14,8 @@ jobs:
               sudo chmod 0755 debootstrap/debootstrap
               sudo ln -s $(realpath debootstrap/debootstrap) -t /usr/bin
               sudo ln -s $(realpath debootstrap) -t /usr/share/
-      - name: install qemu-user
-        run:  sudo apt install qemu-user
+      - name: install qemu-user-static
+        run:  sudo apt install qemu-user-static
 
       - name: exec scripts/build_all.sh
         run:  sudo bash -c "cd scripts && chmod +x -R . && ./build_all.sh"
