@@ -18,7 +18,7 @@ public:
 private:
     Ui::MiscWidget *ui;
 
-    void onClickStartSystemd();
+    static void onClickStartSystemd();
 };
 
 #endif // MISCWIDGET_H

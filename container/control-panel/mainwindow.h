@@ -3,6 +3,7 @@
 
 #include <QMainWindow>
 #include <QLabel>
+#include <QSettings>
 
 QT_BEGIN_NAMESPACE
 namespace Ui {
@@ -20,6 +21,8 @@ public:
     MainWindow(QWidget *parent = nullptr);
 
     ~MainWindow();
+
+    void runOnUiThreadBlocked(const std::function<void()> &function);
 
 signals:
 

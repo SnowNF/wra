@@ -4,6 +4,7 @@
 #include <mainwindow.h>
 #include <QFile>
 #include <iostream>
+#include <thread>
 
 NetworkWidget::NetworkWidget(QWidget *parent)
         : QWidget(parent), ui(new Ui::NetworkWidget) {
@@ -15,13 +16,21 @@ NetworkWidget::~NetworkWidget() {
     delete ui;
 }
 
+static bool msg(const QString &prog, const QStringList &arg, const QString &result) {
+    bool ret;
+    MainWindow::getInstance()->runOnUiThreadBlocked([&] {
+        ret = Utils::unableToExecContinueMsgBox(prog, arg, result);
+    });
+    return ret;
+}
+
 static bool groupAdd(const QString &id, const QString &name) {
     QString result;
     QString prog = "/usr/sbin/groupadd";
     QStringList arg = {"-g", id, name};
     int r = Utils::exec(prog, arg, result);
     if (r != 0 && r != 9) {
-        return Utils::unableToExecContinueMsgBox(prog, arg, result);
+        return msg(prog, arg, result);
     }
     return true;
 }
@@ -32,7 +41,7 @@ static bool userMod(const QString &groupName, const QString &userName) {
     QStringList arg = {"-a", "-G", groupName, userName};
     int r = Utils::exec(prog, arg, result);
     if (r != 0 && r != 9) {
-        return Utils::unableToExecContinueMsgBox(prog, arg, result);
+        return msg(prog, arg, result);
     }
     return true;
 }
@@ -56,38 +65,43 @@ static bool readAllUsers(QStringList &users) {
 }
 
 void NetworkWidget::onCLickFixSocketPermission() {
+    if (!Utils::checkRoot())
+        return;
     int i = MainWindow::getInstance()->addStatusStrA("Performing");
-
-    //https://android.googlesource.com/platform/system/core/+/master/libcutils/include/private/android_filesystem_config.h
-    struct {
-        QString id;
-        QString name;
-    } cmd[] = {
-            {"3001", "aid_net_bt_admin"},
-            {"3002", "aid_net_bt"},
-            {"3003", "aid_inet"},
-            {"3004", "aid_net_raw"},
-            {"3005", "aid_net_admin"},
-            {"3006", "aid_net_bw_stats"},
-            {"3007", "aid_net_bw_acct"},
-            {"3009", "aid_readproc"},
-            {"3010", "aid_wakelock"},
-            {"3011", "aid_uhid"},
-            {"3012", "aid_readtracefs"},
-            {"3013", "aid_virtualmachine"}
-    };
-    QStringList users;
-    for (const auto &item: cmd) {
-        if (!groupAdd(item.id, item.name))
-            goto end;
-    }
-    readAllUsers(users);
-    for (const auto &user: users) {
-        for (const auto &group: cmd) {
-            if (!userMod(group.name, user))
+    std::thread([i] {
+        //https://android.googlesource.com/platform/system/core/+/master/libcutils/include/private/android_filesystem_config.h
+        struct {
+            QString id;
+            QString name;
+        } cmd[] = {
+                {"3001", "aid_net_bt_admin"},
+                {"3002", "aid_net_bt"},
+                {"3003", "aid_inet"},
+                {"3004", "aid_net_raw"},
+                {"3005", "aid_net_admin"},
+                {"3006", "aid_net_bw_stats"},
+                {"3007", "aid_net_bw_acct"},
+                {"3009", "aid_readproc"},
+                {"3010", "aid_wakelock"},
+                {"3011", "aid_uhid"},
+                {"3012", "aid_readtracefs"},
+                {"3013", "aid_virtualmachine"}
+        };
+        QStringList users;
+        for (const auto &item: cmd) {
+            if (!groupAdd(item.id, item.name))
                 goto end;
         }
-    }
-    end:
-    MainWindow::getInstance()->removeStatusStrA(i, "Finished");
+        readAllUsers(users);
+        for (const auto &user: users) {
+            for (const auto &group: cmd) {
+                if (!userMod(group.name, user))
+                    goto end;
+            }
+        }
+        end:
+        MainWindow::getInstance()->runOnUiThread([i] {
+            MainWindow::getInstance()->removeStatusStrA(i, "Finished");
+        });
+    }).detach();
 }

@@ -13,6 +13,12 @@ static struct {
               {"270 deg cw",           "0 1 0 -1 0 1"},
               {"reflect along y axis", "-1 0 1 1 0 0"}};
 
+static QString getCfgPath() {
+    QString path = QDir::homePath();
+    path += "/.config/labwc/rc.xml";
+    return QDir(path).canonicalPath();
+}
+
 LabwcWidget::LabwcWidget(QWidget *parent)
         : QWidget(parent), ui(new Ui::LabwcWidget) {
     ui->setupUi(this);
@@ -20,6 +26,7 @@ LabwcWidget::LabwcWidget(QWidget *parent)
     for (const auto &item: Values) {
         ui->cbComboBox->addItem(item.name);
     }
+    ui->saveLabel->setText(getCfgPath());
 }
 
 LabwcWidget::~LabwcWidget() {
@@ -27,9 +34,8 @@ LabwcWidget::~LabwcWidget() {
 }
 
 void LabwcWidget::onClickSave() {
-    QString path = QDir::homePath();
-    path += "/.config/labwc/rc.xml";
     QString value = Values[ui->cbComboBox->currentIndex()].value;
+    QString path = getCfgPath();
     int i = MainWindow::getInstance()->addStatusStrA("Writing " + value + " to " + path);
     XmlHelper xml;
     xml.openFile(path);

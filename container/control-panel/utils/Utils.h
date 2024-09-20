@@ -15,6 +15,10 @@ public:
     static QString cmdToString(const QString &program, const QStringList &arguments);
 
     static bool unableToExecContinueMsgBox(const QString &program, const QStringList &arguments, const QString &result);
+
+    static bool checkRoot();
+
+    static void execInTerminal(const QString &cmd);
 };
 
 

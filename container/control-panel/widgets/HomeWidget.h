@@ -17,6 +17,8 @@ public:
 
 private:
     Ui::HomeWidget *ui;
+
+    static void onClickStartRootMode();
 };
 
 #endif // HOMEWIDGET_H

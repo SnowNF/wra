@@ -6,6 +6,7 @@
 #include <QMessageBox>
 #include <iostream>
 #include "Utils.h"
+#include <mainwindow.h>
 
 QString Utils::cmdToString(const QString &program, const QStringList &arguments) {
     QString cmd = program;
@@ -29,15 +30,28 @@ int Utils::exec(const QString &program, const QStringList &arguments, QString &r
 }
 
 void Utils::unableToExecMsgBox(const QString &program, const QStringList &arguments, const QString &result) {
-    QMessageBox messageBox;
+    QMessageBox messageBox{MainWindow::getInstance()};
     messageBox.setText("Unable to exec [" + cmdToString(program, arguments) + "]\n\n" + result);
     messageBox.exec();
 }
 
 bool Utils::unableToExecContinueMsgBox(const QString &program, const QStringList &arguments, const QString &result) {
-    QMessageBox messageBox;
+    QMessageBox messageBox{MainWindow::getInstance()};
     messageBox.setText("Unable to exec [" + cmdToString(program, arguments) + "]\n\n" + result + "\nContinue?");
     messageBox.setStandardButtons(QMessageBox::Yes | QMessageBox::No);
     int r = messageBox.exec();
     return r == QMessageBox::Yes;
+}
+
+bool Utils::checkRoot() {
+    if (geteuid() == 0)
+        return true;
+    QMessageBox messageBox{MainWindow::getInstance()};
+    messageBox.setText("Must be root");
+    messageBox.exec();
+    return false;
+}
+
+void Utils::execInTerminal(const QString &cmd) {
+    QProcess::execute("/bin/qterminal", {"-e", "/bin/bash", "-c", cmd});
 }

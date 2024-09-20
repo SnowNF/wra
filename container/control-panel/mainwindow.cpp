@@ -3,6 +3,8 @@
 #include <QSemaphore>
 #include "mainwindow.h"
 #include "./ui_mainwindow.h"
+#include <unistd.h>
+#include <semaphore>
 
 MainWindow::MainWindow(QWidget *parent)
         : QMainWindow(parent), ui(new Ui::MainWindow) {
@@ -10,6 +12,9 @@ MainWindow::MainWindow(QWidget *parent)
     connect(ui->list, &QListWidget::currentRowChanged, ui->stackedWidget, &QStackedWidget::setCurrentIndex);
     connect(this, &MainWindow::runOnUiThread, this, &MainWindow::doRunOnUiThread);
     instance = this;
+    if (geteuid() == 0) {
+        setWindowTitle(windowTitle() + " [root]");
+    }
 }
 
 MainWindow::~MainWindow() {
@@ -92,4 +97,13 @@ void MainWindow::removeStatusStrA(int index, const QString &finishStr, int timeo
 
 MainWindow *MainWindow::getInstance() {
     return instance;
+}
+
+void MainWindow::runOnUiThreadBlocked(const std::function<void()> &function) {
+    std::counting_semaphore<1> semaphore{0};
+    runOnUiThread([&] {
+        function();
+        semaphore.release();
+    });
+    semaphore.acquire();
 }
