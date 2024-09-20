@@ -12,7 +12,7 @@ jobs:
         run:  |
               wget https://salsa.debian.org/installer-team/debootstrap/-/raw/master/debootstrap
               sudo mv debootstrap /usr/local/bin
-              sudo chmod +x /usr/local/bin
+              sudo chmod 0755 /usr/local/bin
 
       - name: exec scripts/build_all.sh
         run:  sudo bash -c "cd scripts && chmod +x -R . && ./build_all.sh"
