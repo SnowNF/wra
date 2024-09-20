@@ -8,6 +8,9 @@ jobs:
       - name: checkout repository
         uses: actions/checkout@v4
 
+      - name: install dependencies
+        run:  sudo apt install debootstrap
+
       - name: exec scripts/build_all.sh
         run:  sudo bash -c "cd scripts && chmod +x -R . && ./build_all.sh"
 
