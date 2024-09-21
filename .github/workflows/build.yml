@@ -17,9 +17,12 @@ jobs:
       - name: install qemu-user-static
         run:  sudo apt install qemu-user-static
 
+      - name: setup permissions
+        run:  sudo bash -c "chmod -R 777 ."
+        
       - name: exec scripts/build_all.sh
-        run:  sudo bash -c "cd scripts && chmod +x -R . && ./build_all.sh"
-
+        run:  sudo bash -c "cd scripts && ./build_all.sh"
+      
       - name: upload build artifacts
         uses: actions/upload-artifact@v4
         with:
