@@ -19,7 +19,7 @@ do_copy() {
 
 mkdir -p gsi
 _notice_ "Mounting gsi.img"
-mount ./gsi.img ./gsi
+mount --read-only ./gsi.img ./gsi
 do_copy || true
 _notice_ "Umounting gsi.img"
 umount ./gsi
