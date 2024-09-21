@@ -17,6 +17,13 @@ jobs:
       - name: install qemu-user-static
         run:  sudo apt install qemu-user-static
 
+      - name: download base gsi.img
+        run:  |
+              mkdir -p build
+              wget https://github.com/TrebleDroid/treble_experimentations/releases/download/ci-20240226/system-td-arm64-ab-vanilla.img.xz
+              tar xvf system-td-arm64-ab-vanilla.img.xz
+              mv system-td-arm64-ab-vanilla.img build/gsi.img
+
       - name: setup permissions
         run:  sudo bash -c "chmod -R 777 ."
         
