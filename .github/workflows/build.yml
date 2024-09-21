@@ -1,0 +1,37 @@
+name: build
+on: [pull_request, push]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: checkout repository
+        uses: actions/checkout@v4
+
+      - name: install debootstrap 
+        run:  |
+              git clone --depth=1 https://salsa.debian.org/installer-team/debootstrap/
+              sudo chmod 0755 debootstrap/debootstrap
+              sudo ln -s $(realpath debootstrap/debootstrap) -t /usr/bin
+              sudo ln -s $(realpath debootstrap) -t /usr/share/
+      - name: install qemu-user-static
+        run:  sudo apt install qemu-user-static
+
+      - name: download base gsi.img
+        run:  |
+              mkdir -p build
+              wget https://github.com/TrebleDroid/treble_experimentations/releases/download/ci-20240226/system-td-arm64-ab-vanilla.img.xz
+              xz -d system-td-arm64-ab-vanilla.img.xz
+              mv system-td-arm64-ab-vanilla.img build/gsi.img
+
+      - name: setup permissions
+        run:  sudo bash -c "chmod -R 777 ."
+        
+      - name: exec scripts/build_all.sh
+        run:  sudo bash -c "cd scripts && ./build_all.sh"
+      
+      - name: upload build artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: Artifacts
+          path: build/system.img
