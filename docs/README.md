@@ -18,7 +18,9 @@ Simply for fun and experimentation
 
 Refer to the [build.md](docs/build.md) file for detailed build instructions.
 
-## 3.Run
+You can also get testing builds from [Github Actions](https://github.com/SnowNF/wra/actions)
+
+## 3. Run
 
 > Do not use it on a device with important data; use at your own risk.
 
